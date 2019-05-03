@@ -2,7 +2,8 @@
 title: "BGGN213 - Lecture 8 - Machine Learning"
 author: "ACGeffre"
 date: "4/26/2019"
- output: github_document
+ html_document:  
+        keep_md: true 
 ---
 
 ```{r setup, include=FALSE}
