@@ -2,8 +2,9 @@
 title: "BGGN213 - Lecture 8 - Machine Learning"
 author: "ACGeffre"
 date: "4/26/2019"
- html_document:  
-        keep_md: true 
+output: 
+  html_document:  
+    keep_md: true 
 ---
 
 ```{r setup, include=FALSE}
