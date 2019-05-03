@@ -1,0 +1,406 @@
+---
+title: "BGGN213 - Lecture 8 - Machine Learning"
+author: "ACGeffre"
+date: "4/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Unsupervised Learning
+
+## K-means Clustering
+We are talking about k-means clustring, wherein you have data you are asking your computer to cluster, given you input of suspected number of groups ("k").
+
+
+The computer will randomly select k mean points and assign groupings based on distance to the randomly-selected mean.  It does this for multiple interations and picks the best on based on the total varience (calc'ed from within-group variation for each group) - lowest variation wins (i.e. each group has points that are tightyl clustered around the mean, comparatively).
+
+
+The computer will alaways give you the number of groups you input - your input may sometimes be wrong. We can determine how many groups there likely are using "scree plots". Scree plots can be used to detect how much increasing the number of groups diminished the within Sum of Squares (SS) error. Please see below:
+
+
+We make some test data for cluster analysis:
+```{r}
+# Generate some example data for clustering
+tmp <- c(rnorm(30,-3), rnorm(30,3)) 
+  # generate to sets of 30 random numbers, with mean -3, and 3, respectively.
+x <- cbind(x=tmp, y=rev(tmp))
+  # bind them shits together.
+plot(x)
+  # Plot them as a x-y thing-thing.
+# Looks two-group-y
+```
+
+We can explore these data with kmeans() function.
+```{r}
+km <- kmeans(x, centers=2, nstart=20) # k = 2, nstart = 20
+km
+```
+
+*Q. How many points are in each cluster?*
+  There are 30 points in each cluster
+*Q. What ‘component’ of your result object details*
+ - *cluster size?*
+   km$size describes the size of the clusters
+```{r}
+km$size
+```
+ - *cluster assignment/membership?*
+   km$cluster describes the group membership (as 1 or 2)
+```{r}
+km$cluster
+table(km$cluster)
+```
+ - *cluster center?*
+  km$centers describes the center (as x/y coordinates) of each cluster
+```{r}
+km$centers
+```
+
+Plot x colored by the kmeans cluster assignment and add cluster centers as blue points.
+ 
+```{r}
+plot(x,col=km$cluster) 
+  # Colors plot points by group membership
+points(km$centers, col="blue", pch=18, cex=3) 
+  # adds special points based on the centers vector, with different shape/size (pch/cex).
+```
+ 
+## Hierarchical Clustering
+
+In hierarchical clustering, each point starts as it's own group. THe computer then find the closest points and lumps them into the same group, and so on, untill all points are in the same group. 
+
+We can calculate the relationships between and groupings of the data using this clustering style and visualizing with a dendrogram.
+
+### Calculate the distance matrix
+```{r}
+# First we need to calculate point (dis)similarity as the Euclidean distance between observations
+# Our input is a distance matrix from the dist() function. Lets make sure we understand it first
+dist_matrix <- dist(x)
+dim(dist_matrix)
+
+dim(x)
+
+dim( as.matrix(dist_matrix) )
+# Note. symmetrical pairwise distance matrix
+```
+
+### Run hclust() for hierarchical clustering analysis
+```{r}
+# The hclust() function returns a hierarchical
+# clustering model
+hc <- hclust(d = dist_matrix)
+# the print method is not so useful here
+hc 
+# not very descriptive
+```
+ To better understand what has happened in hclust(), we can use plots called a dendrogram. 
+
+### Plot clusters with dendrogram
+```{r}
+plot(hc)
+```
+ 
+The dendrogram is assigned based on the order/sequence in which hclust() grouped each of the points (see PPT for good visualization).
+
+We can split the dendrogram into k groups by using cutree()
+```{r}
+# Draws a dendrogram
+plot(hc)
+abline(h=6, col="red") # draws a red line at height 6
+# Splits the tree into two groups
+```
+
+Cut into 2 groups
+```{r}
+gp2 <- cutree(hc, k=2 ) # Cut into k groups
+gp2
+```
+
+Cut into 3 groups
+```{r}
+gp3 <- cutree(hc, k=3 )
+gp3
+```
+
+Who is in each group?
+```{r}
+table(gp3) # Give the number of points in each group
+#  gp3
+# 1  2  3 
+# 30  2 28 
+
+table(gp2)
+# gp2
+# 1  2 
+# 30 30 
+```
+
+Compare the two groupings
+```{r}
+table(gp2, gp3)
+```
+
+### Comparing linking methods in kmean clustering:
+Complete: pairwise similarity between all observations in cluster 1 and cluster 2, and uses largest of similarities
+
+* Single: same as above but uses smallest of similarities
+* Average: same as above but uses average of similarities
+* Centroid: finds centroid of cluster 1 and centroid of cluster 2, and uses similarity between two centroids 
+
+(Note centroid is a little more subject to weirdness, so it's less used)
+
+# An exercise, with hierarchical clustering:
+
+## Step 1. Generate some example data for clustering - random and messy
+```{r}
+set.seed(53)
+x <- rbind(
+ matrix(rnorm(100, mean=0, sd = 0.3), ncol = 2), # c1
+ matrix(rnorm(100, mean = 1, sd = 0.3), ncol = 2), # c2
+ matrix(c(rnorm(50, mean = 1, sd = 0.3), # c3
+ rnorm(50, mean = 0, sd = 0.3)), ncol = 2))
+colnames(x) <- c("x", "y")
+
+```
+
+## Step 2. Plot the data without clustering
+```{r}
+plot(x) # Very spread out
+```
+
+## Step 3. Generate colors for known clusters
+(This is just so we can compare to hclust results)
+```{r}
+col <- as.factor( rep(c("c1","c2","c3"), each=50) )
+plot(x, col=col)
+```
+
+
+## Your Turn!
+*Q. Use the dist(), hclust(), plot() and cutree() functions to return 2 and 3 clusters.*
+```{r}
+bggnclust <- function(x) { # make a function, just for funzies
+  distx <- dist(x)
+  hclustx <- hclust(d = distx)
+}
+
+clustx <- bggnclust(x) # make the hclust object
+plot(clustx) # make a dendrogram of the hclust object
+```
+
+
+Snip into 2 groups
+```{r}
+plot(clustx)
+abline(h=2.5, col="green")
+```
+
+```{r}
+clustx2 <- cutree(clustx, k = 2)
+table(clustx2)
+```
+
+
+Snip into 3 groups
+```{r}
+plot(clustx)
+abline(h=2, col="green")
+```
+
+```{r}
+clustx3 <- cutree(clustx, k = 3)
+table(clustx3)
+```
+
+Q. How does this compare to your known 'col' groups?
+
+
+# Principal Component Analysis
+
+
+## Absolute basics
+
+"PCA converts the correlations (or lack there of) among all cells into a representation we can more readily interpret (e.g. a 2D graph!)"
+
+
+High correlation means closer clustering. (Tight clustering means greater correaltion). These correlatins are collapsed into eigenvectors or "PC"s. Thus, this technique is a type of dimensionality reduction we can use to consider data with many, many factors! (e.g. GCMS data, bioinformatics data, etc.)
+
+
+*From the PPT*
+"The PCs (i.e. new plot axis) are ranked by their importance:
+* So PC1 is more important than PC2 which in turn is more important than PC3 etc.
+* The PCs (i.e. new plot axis) are ranked by the amount of variance in the original data (i.e. gene expression values) that they “capture”" 
+* PC1 captures the most varience, then PC2, etc.You can check this by plotting the eigenvectors of the comparisons. 
+* We can view which factors contribute the most to PCs by considering the loadings produced by PCA.
+* Loadings 
+
+
+# PCA in R (with gene expression data)
+
+### Read in the data set
+```{r}
+gene <- read.csv("expression.csv", row.names = 1)
+head(gene)
+```
+
+```{r}
+dim(gene)
+ncol(gene) # 10 samples
+nrow(gene) # 100 genes
+```
+There are `r nrow(gene)` genes in our dataset, and `r ncol(gene)` samples. 
+
+### Do PCA
+```{r}
+gpca <- prcomp(t(gene)) # runs PCA on transposed dataset
+gpca2 <- prcomp(t(gene), scale = TRUE) # runs PCA on transposed dataset
+print(gpca)
+```
+
+### Get summarized Eigenvector deets
+```{r}
+summary(gpca) # unscaled
+summary(gpca2) # scaled  
+
+# We can see that PC1 captures like 93% of the varience of the data, everything else just gets teensy fractions of it
+```
+
+```{r}
+attributes(gpca2) # look at what is contained within our PCA object
+```
+
+### Plot that shit
+```{r}
+plot(gpca2$x[,1], gpca2$x[,2]) # Plot PC1 (as x) and PC2 (as y)
+```
+
+### Examine the varience explained by each PC with a histogram
+First, we calculate the varience explained by each PC.
+```{r}
+## Variance captured per PC - pulls out std.dev and calculates var from it
+pca.var <- gpca2$sdev^2
+
+## Precent variance is often more informative to look at  - converts var to a percentage
+pca.var.per <- round(pca.var/sum(pca.var)*100, 1)
+pca.var.per
+```
+
+Now we make a cute histogram for them.
+```{r}
+barplot(pca.var.per, main="Scree Plot",
+ xlab="Principal Component", ylab="Percent Variation")
+```
+PC1 explains basically all the variation in the PCA - such a hard working PC!
+
+### For funzies: 
+Let's make a barplot that pops in the varience explained on the axes labels!
+```{r}
+plot(gpca2$x[,1], gpca2$x[,2], xlab=paste("PC1 (", pca.var.per[1],"%)"), ylab=paste("PC2 (", pca.var.per[2],"%)"))
+text(gpca2$x[,1], gpca2$x[,2], colnames(gene)) # labels according to sample
+# Let's just love on how special it is to use the paste() function to stitch strings and output together.
+# Love love love
+```
+
+### Also fun
+```{r}
+## A vector of colors for wt and ko samples
+colvec <- colnames(gene)        
+colvec[grep("wt", colvec)] <- "red"
+colvec[grep("ko", colvec)] <- "blue"
+
+plot(gpca2$x[,1], gpca2$x[,2], col=colvec, pch=16,
+     xlab=paste0("PC1 (", pca.var.per[1], "%)"),
+     ylab=paste0("PC2 (", pca.var.per[2], "%)"))
+
+text(gpca2$x[,1], gpca2$x[,2], labels = colnames(gene), pos=c(rep(4,5), rep(2,5)))
+```
+
+
+Aside: using the identify() function [identify(gpca2$x[,1], gpca2$x[,2], colnames(gene))] will allow you to use your R plot to ID particular data points by hovering the mouse over them. 
+
+# An Exercise (2), with UK food data
+
+## Read in UK foods data set
+```{r}
+food <- read.csv("UK_foods.csv")
+head(food)
+summary(food)
+```
+
+## Perform PCA using prcomp
+```{r}
+# prcomp(t(food))  initial uncorrected data set throws an error
+str(food)  # R thinks my row names are data!
+```
+### First, let's pop the column X into the row names
+```{r}
+names <- food$X # make a new vector from food row names
+
+food2 <- read.csv("UK_foods.csv")[,-1] # lop off the first column which is causing errors for us
+tfood <- t(food2)
+colnames(tfood) <- names
+# This pops the original row names onto the column headers for our transposed data set
+# These data are ready for PCA now!
+```
+
+```{r}
+# Another way to do this (according to PPT)
+
+# rownames(food) <- food[,1]
+# food <- food[,-1]
+# head(food)
+
+# This will eat your datafram if run more than once, however,
+```
+
+### Plot them shits
+#### Normal barplot
+```{r}
+barplot(as.matrix(food2), beside=T, col=rainbow(nrow(food2)))
+# Hist of values based on row identity 
+# (e.g. each color is a different food type and the x axis is how much of it is eaten)
+```
+#### Weird stacked barplot - basically useless
+```{r}
+barplot(as.matrix(food2), beside=F, col=rainbow(nrow(food2)))
+```
+
+#### Pairwise plots
+```{r}
+pairs(food2, col=rainbow(10), pch=16)
+```
+This is basically a correlation matrix, almost. It plots pairwise comparisons of all countries by each other. Hard to interpret, though. We can't compare everything together. 
+
+PCA to the rescue!
+
+### Try PCA again, with manicured dataset
+```{r}
+ptf <- prcomp(tfood, scale = T)
+summary(ptf)
+```
+
+### Plot that shit also!
+#### Regular
+```{r}
+plot(ptf$x[,1], ptf$x[,2], col = "turquoise", pch=16,
+     xlab=paste0("PC1 (", pca.var.per[1], "%)"),
+     ylab=paste0("PC2 (", pca.var.per[2], "%)"))
+text(ptf$x[,1], ptf$x[,2], labels = colnames(food), pos=c(rep(4,5), rep(2,5)))
+```
+
+
+#### With colors
+```{r}
+foodcolor <- c("green", "blue", "purple", "red")
+
+plot(ptf$x[,1], ptf$x[,2], col = "turquoise", pch=16,
+     xlab=paste0("PC1 (", pca.var.per[1], "%)"),
+     ylab=paste0("PC2 (", pca.var.per[2], "%)"))
+
+text(ptf$x[,1], ptf$x[,2], labels = colnames(food), col = foodcolor, pos=c(rep(4,5), rep(2,5)))
+```
+
+
