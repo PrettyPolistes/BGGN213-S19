@@ -1,0 +1,15 @@
+---
+title: "Lecture 13 - Ensemble Genome Stuff"
+author: "ACGeffre"
+date: "5/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+mxl <- read.csv("X373531_SampleGenotypes_Homo_sapiens_Variation_Sample_rs12936231.csv")
+```
+
