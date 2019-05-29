@@ -170,3 +170,86 @@ v.size <- BBmisc::normalize(d, range=c(2,20), method="range")
 plot(g, vertex.size=v.size, vertex.label=NA)
 ```
 
+## Adding Taxonomic Group names
+
+### Read in the taxonomic names
+
+Let's use these data files to include the phage and bacteria taxonomic names.
+```{r}
+phage_id_affiliation <- read.delim("phage_ids_with_affiliation.tsv")
+head(phage_id_affiliation)
+bac_id_affi <- read.delim("prok_tax_from_silva.tsv", stringsAsFactors = FALSE)
+head(bac_id_affi)
+```
+
+### Paste names onto our verteces
+```{r}
+## Extract out our vertex names
+genenet.nodes <- as.data.frame(vertex.attributes(g), stringsAsFactors=FALSE)
+head(genenet.nodes)
+# recall that we can use the "grep()" command to search for a pattern. Here we search for a datum that starts with "ph_".
+print(paste("We have", length(grep("^ph_",genenet.nodes[,1])), "unique phages in this data set"))
+```
+
+### Trim the Data to useful info
+```{r}
+# We dont need all annotation data so lets make a reduced table 'z' for merging
+z <- bac_id_affi[,c("Accession_ID", "Kingdom", "Phylum", "Class")]
+n <- merge(genenet.nodes, z, by.x="name", by.y="Accession_ID", all.x=TRUE)
+head(n)
+```
+
+### Merge the data
+First, lets' check the column names of each, so we know how to merge them
+```{r}
+colnames(n)
+```
+
+```{r}
+colnames(phage_id_affiliation)
+```
+
+```{r}
+# Again we only need a subset of `phage_id_affiliation` for our purposes
+y <- phage_id_affiliation[, c("first_sheet.Phage_id_network", "phage_affiliation","Tax_order", "Tax_subfamily")]
+
+# Add the little phage annotation that we have
+x <- merge(x=n, y=y, by.x="name", by.y="first_sheet.Phage_id_network", all.x=TRUE)
+
+## Remove duplicates from multiple matches
+x <- x[!duplicated( (x$name) ),]
+head(x)
+```
+
+And don't forget to save the merged data back to our original file.
+```{r}
+genenet.nodes <- x
+```
+
+
+### Send this to CytoScape
+
+First, let's clear the CytoScape terminal.
+```{r}
+deleteAllNetworks()
+```
+
+```{r}
+colnames(genenet.nodes)[1] <- "id"
+```
+
+And now let's send the data from the Tara Oceans stuff over to CytoScape.
+```{r}
+genenet.edges <- data.frame(igraph::as_edgelist(g))
+
+# Set the main edges colname to the required "source" and "target" 
+colnames(genenet.edges) <- c("source","target")
+
+# Add the weight from igraph to a new column...
+genenet.edges$Weight <- igraph::edge_attr(g)$weight
+
+# Send as a new network to Cytoscape
+createNetworkFromDataFrames(genenet.nodes,genenet.edges, 
+                            title="Tara_Oceans")
+```
+And if we check in CytoScape, those data are now living over there! For exporting the fancy CytoScape network files/data/graphics, see the BGGN 213 [site](https://bioboot.github.io/bggn213_S19/class-material/lecture17_BGGN213_S19_new.html) for exporting those data to [NDEX](http://www.ndexbio.org/#/), the Network Data Exchange web server, which houses large scale network stuff liek this. 
