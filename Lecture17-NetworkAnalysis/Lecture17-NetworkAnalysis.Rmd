@@ -2,7 +2,7 @@
 title: "Lecture 17 - Network Analysis"
 author: "ACGeffre"
 date: "5/29/2019"
-output: github_document
+output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
