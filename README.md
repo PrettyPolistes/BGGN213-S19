@@ -4,11 +4,5 @@ Hello world!  Jk, jk.
 This is some coursework for a sweet class I'm taking: [BGGN-213 at UC San Diego](https://bioboot.github.io/bggn213_S19/).
 
 Also: here is a cat: =^.w.^=
-
-
-A more different cat:  =.v.=
-
-                        V V
                         
-                        
-And lastly, one more final cat: =^oxo^=
+And lastly, a more different cat: =^oxo^=
