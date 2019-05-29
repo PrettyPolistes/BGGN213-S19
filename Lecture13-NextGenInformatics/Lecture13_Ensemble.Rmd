@@ -1,0 +1,44 @@
+---
+title: "Lecture 13 - Ensemble Genome Stuff"
+author: "ACGeffre"
+date: "5/15/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# RNA-Seq Analysis
+
+We will use the fastq files Dr. grant uploaded onto the class website:
+
+
+### Read-in the data
+```{r}
+ens <- read.table("rs8067378_ENSG00000172057.6.txt")
+head(ens)
+summary(ens)
+```
+There are three genotypes listed in this file: A/A (n = 108), A/G (n=233), and G/G (n=121).
+
+### Plot the data by genotype
+```{r}
+ploty <- boxplot(ens$exp ~ ens$geno, notch = TRUE, ylab = "ORMDL3 Expression", xlab = "Genotype")
+# Notch helps suggest the medians for the groups are different (i.e. if they don't overlap they are different.)
+```
+### Examine the data according to the boxplot
+```{r}
+ploty
+```
+
+### Separate data by genotype and summarize
+```{r}
+ggens <- (ens$geno == "G/G")
+  summary(ens[ggens,]$exp)
+aaens <- (ens$geno == "A/A")
+  summary(ens[aaens,]$exp)
+agens <- (ens$geno == "A/G")
+  summary(ens[agens,]$exp)
+```
+

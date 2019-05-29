@@ -1,0 +1,16 @@
+---
+title: "BGGN213_Lect6"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Introduction to writing functions:
+
+Basic structu
+```{r}
+
+```
+
