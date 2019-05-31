@@ -2,14 +2,14 @@
 title: "Lecture 18 - Cancer Informatics"
 author: "ACGeffre"
 date: "5/31/2019"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, include = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install()
@@ -17,7 +17,7 @@ BiocManager::install()
 
 For this worksheet, I will be using instructions from the [BGGN 213 website](https://bioboot.github.io/bggn213_S19/class-material/lecture18_part1_BGGN213_W19.html).
 
-```{r eval=FALSE}
+```{r, include = FALSE}
 BiocManager::install(c("GenomicDataCommons", "TCGAbiolinks", "maftools"))
 library(GenomicDataCommons) # allows us to connect to NCBI GDC
 library(TCGAbiolinks) # Helps with integrative data analysis with GDC data
@@ -28,7 +28,7 @@ library(maftools) # Allows us to summarize, analyze and visualize Mutation Annot
 ## Accessing the Genomic Data Commons
 We use the bioconductor package "GenomicDataCommons" to connect to the NCBI [Genomic Data Commons](https://gdc.cancer.gov/search/node/TP53). First, we will check the status of our connection with the status() command.
 
-```{r}
+```{r eval=FALSE}
 status()
 ```
 
@@ -122,10 +122,6 @@ for(i in 1:length(mutant.sites)) {
 }
 
 store.seqs
-```
-```{r}
-for(i in 1:length(start.position)
-    )
 ```
 
 
