@@ -1,7 +1,7 @@
-Lecture 11 - Struvtural Bioinformatics
+Lecture 11 - Structural Bioinformatics
 ================
 ACGeffre
-5/8/2019
+May 8th 2019
 
 Structural Bioinformatics
 =========================
