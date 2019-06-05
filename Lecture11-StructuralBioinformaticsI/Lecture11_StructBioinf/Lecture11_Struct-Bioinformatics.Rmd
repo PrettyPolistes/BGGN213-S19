@@ -119,30 +119,10 @@ atom.select(pdb, resno = 10, value = TRUE)
 
 ### Select a subset of atoms and write a new pdb
 ```{r}
-pdb1 <- atom.select(pdb, "protein")
-write.pdb(pdb1, "protein-only_hsg1.pdb", pdb1$xyz)
+#pdb1 <- atom.select(pdb, "protein")
+#write.pdb(pdb1, "protein-only_hsg1.pdb", pdb1$xyz)
 
-liga <- atom.select(pdb, "ligand")
-write.pdb(prot, "ligand-only_hsg1")
-```
-
-```{r}
-#install.packages("rgl")
-library(rgl)
-```
-
-```{r}
-install.packages("devtools")
-library(devtools)
-
-devtools::install_bitbucket("Grantlab/bio3d-view")
-install.packages("bio3d.view")
-library(bio3d.view)
-
-```
-
-
-```{r}
-
+#liga <- atom.select(pdb, "ligand")
+#write.pdb(prot, "ligand-only_hsg1")
 ```
 
