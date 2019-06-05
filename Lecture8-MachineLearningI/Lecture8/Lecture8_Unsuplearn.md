@@ -1,7 +1,7 @@
 ---
 title: "BGGN213 - Lecture 8 - Machine Learning - MD"
 author: "ACGeffre"
-date: "4/26/2019"
+date: "April 26th 2019"
 output: 
   html_document:  
     keep_md: true 
