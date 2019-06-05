@@ -2,7 +2,7 @@
 title: "Lecture 14 - Genome Informatics Pt2"
 author: "ACGeffre"
 date: "May 17th 2019"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
