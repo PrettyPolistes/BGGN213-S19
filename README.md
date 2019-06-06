@@ -15,7 +15,7 @@ This is some coursework for a sweet class I'm taking at UCSD: [BGGN-213 at UC Sa
 - [Lecture 13](Lecture13-NextGenInformatics/Lecture13_Ensemble.md)
 - [Lecture 14](Lecture14-GenomeInformatics2/Lect14GenomeInformatics.md)
 - Lecture 15 - Missed for a dentist appointment
-- Lecture 16 - no RMD document for today - just Unix)
+- Lecture 16 - no RMD document for today - just Unix
 - [Lecture 17](Lecture17-NetworkAnalysis/Lecture17-NetworkAnalysis.md)
 - [Lecture 18](Lecture18-CancerGenomics/Lecture18-CancerInformatics.md)
 
