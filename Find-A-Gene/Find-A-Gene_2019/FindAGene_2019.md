@@ -529,8 +529,8 @@ bterr <- read.fasta("bterrestris.fasta")
 blastbterr <- blast.pdb(bterr, database = "pdb")
 ```
 
-    ##  Searching ... please wait (updates every 5 seconds) RID = FF0R0FEX01R 
-    ##  .
+    ##  Searching ... please wait (updates every 5 seconds) RID = FJZJ0JKH015 
+    ##  ....................................
     ##  Reporting 30 hits
 
 ``` r
