@@ -19,6 +19,8 @@ This is some coursework for a sweet class I'm taking at UCSD: [BGGN-213 at UC Sa
 - [Lecture 17](Lecture17-NetworkAnalysis/Lecture17-NetworkAnalysis.md)
 - [Lecture 18](Lecture18-CancerGenomics/Lecture18-CancerInformatics.md)
 
+- [Find-A-Gene Project](Find-A-Gene/Find-A-Gene_2019/FindAGene_2019.md)
+
 ## Also: 
 Here is a cat: =^.w.^=
 Here is a more different cat: =^oxo^=
