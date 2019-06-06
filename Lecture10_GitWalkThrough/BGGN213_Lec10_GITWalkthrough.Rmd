@@ -1,0 +1,16 @@
+---
+title: "Test Git Document"
+author: "ACGeffre"
+date: "May 3rd 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I am adding some text now. 
+
+:3 :3 :3 :3 
+
+Now there are some cat faces.
